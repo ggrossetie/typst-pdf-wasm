@@ -1,0 +1,20 @@
+[package]
+name = "typst-pdf-wasm"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+description = "Minimal Typst-to-PDF compiler as a WebAssembly module"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["fonts"]
+fonts = ["dep:typst-assets"]
+
+[dependencies]
+typst = "0.15.1"
+typst-pdf = "0.15.1"
+typst-layout = "0.15.1"
+typst-assets = { version = "0.15.1", features = ["fonts"], optional = true }

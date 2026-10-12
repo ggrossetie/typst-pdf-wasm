@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>fr.yuzutech.typst</groupId>
+  <artifactId>typst-pdf</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <name>Typst PDF</name>
+  <description>Typst to PDF compiler for the JVM, compiled from WebAssembly to Java bytecode with Chicory</description>
+
+  <licenses>
+    <license>
+      <name>Apache-2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+    </license>
+  </licenses>
+
+  <properties>
+    <maven.compiler.release>11</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <chicory.version>1.7.5</chicory.version>
+    <junit.version>6.1.3</junit.version>
+    <!-- Produced by ../scripts/build-wasm.sh -->
+    <typst.wasm>${project.basedir}/../dist/typst-pdf.wasm</typst.wasm>
+    <!-- Set to true to reuse an existing ${typst.wasm} instead of running cargo -->
+    <skipWasmBuild>false</skipWasmBuild>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.dylibso.chicory</groupId>
+        <artifactId>bom</artifactId>
+        <version>${chicory.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>${junit.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.dylibso.chicory</groupId>
+      <artifactId>runtime</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.6.4</version>
+        <executions>
+          <execution>
+            <id>build-wasm</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <skip>${skipWasmBuild}</skip>
+              <executable>${project.basedir}/../scripts/build-wasm.sh</executable>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <!-- Translates the Wasm module to JVM bytecode at build time -->
+        <groupId>com.dylibso.chicory</groupId>
+        <artifactId>chicory-compiler-maven-plugin</artifactId>
+        <version>${chicory.version}</version>
+        <executions>
+          <execution>
+            <id>typst-pdf</id>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <name>fr.yuzutech.typst.pdf.internal.TypstPdfModule</name>
+              <wasmFile>${typst.wasm}</wasmFile>
+              <interpreterFallback>WARN</interpreterFallback>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.6.0</version>
+      </plugin>
+    </plugins>
+  </build>
+</project>
