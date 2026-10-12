@@ -1,0 +1,10 @@
+{
+  "number": "2026-042",
+  "date": "12/10/2026",
+  "company": "Yuzu Tech",
+  "customer": "ACME",
+  "items": [
+    { "name": "Développement", "qty": 3, "price": 600 },
+    { "name": "Formation Typst", "qty": 1, "price": 900 }
+  ]
+}

@@ -9,11 +9,11 @@ A minimal [Typst](https://typst.app) → PDF compiler packaged as a WebAssembly 
 
 ## Layout
 
-| Path              | Content                                                       |
-|-------------------|---------------------------------------------------------------|
+| Path              | Content                                                        |
+|-------------------|----------------------------------------------------------------|
 | `typst-pdf-wasm/` | Rust `cdylib`: in-memory `World`, C-like ABI, JSON diagnostics |
-| `scripts/`        | `build-wasm.sh` builds `dist/typst-pdf.wasm`                  |
-| `java/`           | Maven module `fr.yuzutech.typst:typst-pdf`                    |
+| `scripts/`        | `build-wasm.sh` builds `dist/typst-pdf.wasm`                   |
+| `java/`           | Maven module `fr.yuzutech.typst:typst-pdf`                     |
 
 The crate only depends on `typst`, `typst-layout`, `typst-pdf` and, with the default `fonts`
 feature, `typst-assets` (Typst's default fonts). No SVG/PNG/HTML export, no package downloads.
