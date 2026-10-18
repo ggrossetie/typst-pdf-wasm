@@ -1,9 +1,0 @@
-{
-  "resources": {
-    "includes": [
-      {
-        "pattern": "\\Qfr/yuzutech/typst/pdf/internal/TypstPdfModule.meta\\E"
-      }
-    ]
-  }
-}

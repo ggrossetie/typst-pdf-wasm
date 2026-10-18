@@ -1,0 +1,7 @@
+{
+  "resources": [
+    {
+      "glob": "fr/yuzutech/typst/pdf/internal/TypstPdfModule.meta"
+    }
+  ]
+}
