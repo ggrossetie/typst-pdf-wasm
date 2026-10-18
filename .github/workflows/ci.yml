@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-build
+      - name: Test crate
+        run: cargo test --locked
+      - name: Build Wasm module and test Java binding
+        working-directory: java
+        run: mvn -B verify
+      - name: Build Wasm module without fonts
+        run: scripts/build-wasm.sh --no-fonts
+      - uses: actions/upload-artifact@v7
+        with:
+          name: typst-pdf
+          path: |
+            java/pom.xml
+            java/target/*.jar
+          retention-days: 7
+
+  # Checks that the library works in a GraalVM native image (reachability metadata)
+  native:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: "25"
+          distribution: graalvm-community
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache: maven
+      - uses: actions/download-artifact@v8
+        with:
+          name: typst-pdf
+          path: typst-pdf
+      - name: Install typst-pdf in the local repository
+        working-directory: typst-pdf
+        run: |
+          jar="$(ls target/typst-pdf-*.jar | grep -v -e '-sources.jar$' -e '-javadoc.jar$')"
+          mvn -B -q install:install-file -Dfile="$jar" -DpomFile=pom.xml
+      - name: Build native CLI example
+        working-directory: examples/native-cli
+        run: mvn -B -Pnative package
+      - name: Compile the invoice example
+        working-directory: examples/native-cli
+        run: |
+          ./target/typst-pdf invoice/main.typ invoice.pdf
+          head -c 5 invoice.pdf | grep -q '%PDF-'

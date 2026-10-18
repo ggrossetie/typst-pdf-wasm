@@ -1,0 +1,88 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g. 0.1.0)"
+        required: true
+      next-version:
+        description: "Next development version (default: next patch, e.g. 0.1.1-SNAPSHOT)"
+        required: false
+
+concurrency:
+  group: release
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ inputs.version }}
+      NEXT_VERSION: ${{ inputs.next-version }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Check versions
+        run: |
+          semver='^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$'
+          if [[ ! "$VERSION" =~ $semver || "$VERSION" == *-SNAPSHOT ]]; then
+            echo "::error::Invalid release version: $VERSION"; exit 1
+          fi
+          if git rev-parse -q --verify "refs/tags/v$VERSION" >/dev/null; then
+            echo "::error::Tag v$VERSION already exists"; exit 1
+          fi
+          if [[ -z "$NEXT_VERSION" && "$VERSION" == *-* ]]; then
+            NEXT_VERSION="${VERSION%%-*}-SNAPSHOT"
+          elif [[ -z "$NEXT_VERSION" ]]; then
+            IFS=. read -r major minor patch <<< "$VERSION"
+            NEXT_VERSION="$major.$minor.$((patch + 1))-SNAPSHOT"
+          fi
+          if [[ ! "$NEXT_VERSION" =~ $semver || "$NEXT_VERSION" != *-SNAPSHOT ]]; then
+            echo "::error::Invalid next version: $NEXT_VERSION (must end with -SNAPSHOT)"; exit 1
+          fi
+          echo "NEXT_VERSION=$NEXT_VERSION" >> "$GITHUB_ENV"
+          echo "Releasing $VERSION, next development version $NEXT_VERSION"
+      - uses: ./.github/actions/setup-build
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Set release version
+        run: scripts/set-version.sh "$VERSION"
+      - name: Build
+        run: |
+          cargo test --locked
+          mvn -B -f java/pom.xml verify
+          mkdir -p release
+          cp dist/typst-pdf.wasm "release/typst-pdf-$VERSION.wasm"
+          scripts/build-wasm.sh --no-fonts
+          cp dist/typst-pdf.wasm "release/typst-pdf-$VERSION-no-fonts.wasm"
+          cp java/target/typst-pdf-"$VERSION"*.jar release/
+          cp java/pom.xml "release/typst-pdf-$VERSION.pom"
+          (cd release && sha256sum -- * > SHA256SUMS)
+          ls -l release
+
+      - name: Commit and tag
+        run: |
+          git commit -am "chore(release): $VERSION"
+          git tag -a "v$VERSION" -m "v$VERSION"
+          git push --atomic origin HEAD:main "v$VERSION"
+      - name: Create GitHub release
+        run: |
+          prerelease=()
+          [[ "$VERSION" == *-* ]] && prerelease=(--prerelease)
+          gh release create "v$VERSION" release/* \
+            --verify-tag --title "v$VERSION" --generate-notes "${prerelease[@]}"
+
+      - name: Set next development version
+        run: |
+          scripts/set-version.sh "$NEXT_VERSION"
+          git commit -am "chore: prepare next development iteration ($NEXT_VERSION)"
+          git push origin HEAD:main
