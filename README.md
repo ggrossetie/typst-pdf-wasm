@@ -21,7 +21,7 @@ feature, `typst-assets` (Typst's default fonts). No SVG/PNG/HTML export, no pack
 ## Build
 
 Requirements: Rust with the `wasm32-unknown-unknown` target, [binaryen](https://github.com/WebAssembly/binaryen)
-(`wasm-opt`, optional but recommended), Java 11+ and Maven.
+(`wasm-opt`, optional but recommended), Java 17+ and Maven.
 
 ```sh
 rustup target add wasm32-unknown-unknown
