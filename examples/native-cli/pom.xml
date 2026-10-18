@@ -6,7 +6,7 @@
 
   <groupId>fr.yuzutech.typst</groupId>
   <artifactId>typst-pdf-native-cli</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1-SNAPSHOT</version>
   <name>Typst PDF native CLI example</name>
 
   <properties>
@@ -19,7 +19,7 @@
     <dependency>
       <groupId>fr.yuzutech.typst</groupId>
       <artifactId>typst-pdf</artifactId>
-      <version>0.1.0</version>
+      <version>0.1.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
 

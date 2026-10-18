@@ -6,7 +6,7 @@
 
   <groupId>fr.yuzutech.typst</groupId>
   <artifactId>typst-pdf</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1-SNAPSHOT</version>
   <name>Typst PDF</name>
   <description>Typst to PDF compiler for the JVM, compiled from WebAssembly to Java bytecode with Chicory</description>
 
