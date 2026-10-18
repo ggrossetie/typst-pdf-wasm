@@ -73,8 +73,18 @@ with `alloc`, writes, calls, then frees with `dealloc` (the module copies what i
 Diagnostics:
 
 ```json
-[{"severity":"error","message":"unknown variable: x","path":"/main.typ",
-  "line":2,"column":2,"start":7,"end":8,"hints":[]}]
+[
+  {
+    "severity": "error",
+    "message": "unknown variable: x",
+    "path": "/main.typ",
+    "line": 2,
+    "column": 2,
+    "start": 7,
+    "end": 8,
+    "hints": []
+  }
+]
 ```
 
 The module has no imports, so any Wasm runtime can host it.
