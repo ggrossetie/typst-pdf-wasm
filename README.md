@@ -1,5 +1,7 @@
 # typst-pdf-wasm
 
+[![CI](https://github.com/ggrossetie/typst-pdf-wasm/actions/workflows/ci.yml/badge.svg)](https://github.com/ggrossetie/typst-pdf-wasm/actions/workflows/ci.yml)
+
 A minimal [Typst](https://typst.app) → PDF compiler packaged as a WebAssembly module, with bindings for:
 
 - **Java** (Maven): the Wasm module is translated to JVM bytecode at build time by
