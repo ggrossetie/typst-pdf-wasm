@@ -41,3 +41,7 @@ runs:
         distribution: temurin
         java-version: ${{ steps.java.outputs.version }}
         cache: maven
+        # Maven Central credentials, only set by the release workflow
+        server-id: central
+        server-username: MAVEN_CENTRAL_USERNAME
+        server-password: MAVEN_CENTRAL_PASSWORD

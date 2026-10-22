@@ -10,12 +10,28 @@
   <name>Typst PDF</name>
   <description>Typst to PDF compiler for the JVM, compiled from WebAssembly to Java bytecode with Chicory</description>
 
+  <url>https://github.com/ggrossetie/typst-pdf-wasm</url>
+
   <licenses>
     <license>
       <name>Apache-2.0</name>
       <url>https://www.apache.org/licenses/LICENSE-2.0</url>
     </license>
   </licenses>
+
+  <developers>
+    <developer>
+      <id>ggrossetie</id>
+      <name>Guillaume Grossetie</name>
+      <email>ggrossetie@yuzutech.fr</email>
+    </developer>
+  </developers>
+
+  <scm>
+    <url>https://github.com/ggrossetie/typst-pdf-wasm</url>
+    <connection>scm:git:https://github.com/ggrossetie/typst-pdf-wasm.git</connection>
+    <developerConnection>scm:git:git@github.com:ggrossetie/typst-pdf-wasm.git</developerConnection>
+  </scm>
 
   <properties>
     <maven.compiler.release>17</maven.compiler.release>
@@ -131,4 +147,44 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <!-- Signs the artifacts and publishes them to Maven Central (mvn -Prelease deploy) -->
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <!-- Reads the armored private key from MAVEN_GPG_KEY and its passphrase from MAVEN_GPG_PASSPHRASE -->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>3.2.8</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+                <configuration>
+                  <signer>bc</signer>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <!-- Uses the credentials of the "central" server from settings.xml -->
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.12.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>true</autoPublish>
+              <waitUntil>published</waitUntil>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
