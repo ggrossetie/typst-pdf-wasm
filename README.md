@@ -53,6 +53,12 @@ Gradle (Kotlin DSL):
 implementation("fr.yuzutech.typst:typst-pdf:0.1.1")
 ```
 
+Gradle (Groovy DSL):
+
+```groovy
+implementation 'fr.yuzutech.typst:typst-pdf:0.1.1'
+```
+
 ## Java usage
 
 ```java

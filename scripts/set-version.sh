@@ -19,7 +19,7 @@ done
 # The README documents the latest release, not development versions
 if [[ "$version" != *-SNAPSHOT ]]; then
   sed -i -e "/<artifactId>typst-pdf<\/artifactId>/{n;s|<version>.*</version>|<version>${version}</version>|}" \
-    -e "s|\"fr.yuzutech.typst:typst-pdf:[^\"]*\"|\"fr.yuzutech.typst:typst-pdf:${version}\"|" "$root/README.md"
+    -e "s|\([\"']\)fr.yuzutech.typst:typst-pdf:[^\"']*|\1fr.yuzutech.typst:typst-pdf:${version}|" "$root/README.md"
 fi
 
 sed -i "0,/^version = \".*\"/s//version = \"${version}\"/" "$root/typst-pdf-wasm/Cargo.toml"
