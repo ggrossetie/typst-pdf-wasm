@@ -10,7 +10,7 @@
   <name>Typst PDF</name>
   <description>Typst to PDF compiler for the JVM, compiled from WebAssembly to Java bytecode with Chicory</description>
 
-  <url>https://github.com/ggrossetie/typst-pdf-wasm</url>
+  <url>https://github.com/yuzutech/typst-pdf-wasm</url>
 
   <licenses>
     <license>
@@ -28,9 +28,9 @@
   </developers>
 
   <scm>
-    <url>https://github.com/ggrossetie/typst-pdf-wasm</url>
-    <connection>scm:git:https://github.com/ggrossetie/typst-pdf-wasm.git</connection>
-    <developerConnection>scm:git:git@github.com:ggrossetie/typst-pdf-wasm.git</developerConnection>
+    <url>https://github.com/yuzutech/typst-pdf-wasm</url>
+    <connection>scm:git:https://github.com/yuzutech/typst-pdf-wasm.git</connection>
+    <developerConnection>scm:git:git@github.com:yuzutech/typst-pdf-wasm.git</developerConnection>
   </scm>
 
   <properties>

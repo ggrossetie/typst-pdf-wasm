@@ -1,6 +1,7 @@
 # typst-pdf-wasm
 
-[![CI](https://github.com/ggrossetie/typst-pdf-wasm/actions/workflows/ci.yml/badge.svg)](https://github.com/ggrossetie/typst-pdf-wasm/actions/workflows/ci.yml)
+[![CI](https://github.com/yuzutech/typst-pdf-wasm/actions/workflows/ci.yml/badge.svg)](https://github.com/yuzutech/typst-pdf-wasm/actions/workflows/ci.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/fr.yuzutech.typst/typst-pdf)](https://central.sonatype.com/artifact/fr.yuzutech.typst/typst-pdf)
 
 A minimal [Typst](https://typst.app) → PDF compiler packaged as a WebAssembly module, with bindings for:
 
