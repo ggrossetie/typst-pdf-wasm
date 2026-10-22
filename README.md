@@ -35,7 +35,9 @@ mvn verify -DskipWasmBuild=true  # reuse an existing dist/typst-pdf.wasm
 
 ## Java installation
 
-The library is published on Maven Central and requires Java 17+:
+The library is published on Maven Central and requires Java 17+.
+
+Maven:
 
 ```xml
 <dependency>
@@ -43,6 +45,12 @@ The library is published on Maven Central and requires Java 17+:
   <artifactId>typst-pdf</artifactId>
   <version>0.1.1</version>
 </dependency>
+```
+
+Gradle (Kotlin DSL):
+
+```kotlin
+implementation("fr.yuzutech.typst:typst-pdf:0.1.1")
 ```
 
 ## Java usage
