@@ -2409,7 +2409,7 @@ dependencies = [
 
 [[package]]
 name = "typst-pdf-wasm"
-version = "0.1.1-SNAPSHOT"
+version = "0.1.1"
 dependencies = [
  "typst",
  "typst-assets",
