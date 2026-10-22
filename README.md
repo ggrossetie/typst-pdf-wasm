@@ -33,6 +33,18 @@ cd java && mvn verify            # runs build-wasm.sh, then Chicory, then the te
 mvn verify -DskipWasmBuild=true  # reuse an existing dist/typst-pdf.wasm
 ```
 
+## Java installation
+
+The library is published on Maven Central and requires Java 17+:
+
+```xml
+<dependency>
+  <groupId>fr.yuzutech.typst</groupId>
+  <artifactId>typst-pdf</artifactId>
+  <version>0.1.1</version>
+</dependency>
+```
+
 ## Java usage
 
 ```java
